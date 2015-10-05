@@ -58,13 +58,9 @@ public class Percolation {
         int loc = location(i, j);
         openSites[loc] = true;
         
-        if(i == 1){
-            wqu.union(0, loc);
-        }
-        if(i == maxSize){
-            wqu.union(loc, (fullSize - 1));
-        }
-           
+        if(i == 1){ wqu.union(0, loc); }
+        if(i == maxSize){ wqu.union(loc, (fullSize - 1)); }
+       
         calculateAdjacents(i, j);
         
         for(int index = 0; index < adjacents.length; index++){
@@ -78,6 +74,9 @@ public class Percolation {
     };
     
     public boolean isOpen(int i, int j){  // is site (row i, column j) open?
+//        System.out.print(i);
+//        System.out.print(", ");
+//        System.out.print(j);
         isValid(i, j);
         int loc = location(i, j);
         return openSites[loc];
