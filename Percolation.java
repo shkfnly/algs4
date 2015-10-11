@@ -7,48 +7,15 @@ public class Percolation {
     private boolean[] openSites;
     private int[][] adjacents = new int[4][2];
     
-    private void calculateAdjacents(int i, int j) {
-        int[] a = {(i + 1), j};
-        int[] b = {(i - 1), j};
-        int[] c = {i, (j + 1)};
-        int[] d = {i, (j - 1)};
-        adjacents[0] = a;
-        adjacents[1] = b;
-        adjacents[2] = c;
-        adjacents[3] = d;
-    };
-    
-    private boolean isValidRowColumn(int i, int j) {
-      if ((i < 1 || i > maxSize) || (j < 1 || j > maxSize)) {
-          return false;
-      }
-      return true;
-    };
-    
-    private void isValid(int i, int j) {
-        if ((i < 1 || i > maxSize) || (j < 1 || j > maxSize)) {
-            throw new IndexOutOfBoundsException();
-        }
-    };
-    
-    private int location(int i, int j) { //converts the row, grid to a number
-        isValid(i, j);
-        return ((i - 1) * maxSize + j);
-    };
-
-    public Percolation(int N) { // create N-by-N grid, with all sites blocked
+    public Percolation(int N) { // create N-by-N grid, with all sites blocked    
         if (N <= 0) {
             throw new IllegalArgumentException();
-        }
+        }    
         maxSize = N;
         fullSize = N * N + 2;
         wqu = new WeightedQuickUnionUF(fullSize);
         openSites = new boolean[fullSize];
-        for (int i = 0; i < fullSize; i++) {
-           openSites[i] = false;
-        }
-        openSites[0] = true;
-        openSites[fullSize - 1] = true;
+        defineOpenSites(openSites);
     };
 
     public void open(int i, int j) {  // open site (row i, column j) if it is not already open
@@ -83,7 +50,42 @@ public class Percolation {
     public boolean percolates() { // does the system percolate?
         return wqu.connected(0, ((maxSize * maxSize) + 1));
     }; 
+    private void calculateAdjacents(int i, int j) {
+        int[] a = {(i + 1), j};
+        int[] b = {(i - 1), j};
+        int[] c = {i, (j + 1)};
+        int[] d = {i, (j - 1)};
+        adjacents[0] = a;
+        adjacents[1] = b;
+        adjacents[2] = c;
+        adjacents[3] = d;
+    };
     
+    private boolean isValidRowColumn(int i, int j) {
+      if ((i < 1 || i > maxSize) || (j < 1 || j > maxSize)) {
+          return false;
+      }
+      return true;
+    };
+    
+    private void isValid(int i, int j) {
+        if ((i < 1 || i > maxSize) || (j < 1 || j > maxSize)) {
+            throw new IndexOutOfBoundsException();
+        }
+    };
+    
+    private int location(int i, int j) { //converts the row, grid to a number
+        isValid(i, j);
+        return ((i - 1) * maxSize + j);
+    };
+    
+    private void defineOpenSites(boolean[] a) {
+        for (int i = 0; i < fullSize; i++) {
+           a[i] = false;
+        }
+        a[0] = true;
+        a[fullSize - 1] = true;
+    }
     public static void main(String[] args) {
         Percolation percolator = new Percolation(5);
         percolator.open(1, 1);
